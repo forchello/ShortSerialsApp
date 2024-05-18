@@ -3,7 +3,6 @@ import metrics from '@/utils/metrics';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
   ActivityIndicator,
-  Image,
   Pressable,
   Text,
   TouchableOpacity,
@@ -11,13 +10,18 @@ import {
 } from 'react-native';
 import Video, {VideoRef} from 'react-native-video';
 import styles from './FeedVideoStyles';
-import {images} from '@/theme';
+import {colors, images} from '@/theme';
 
 import PlayIcon from '@/assets/svg/play.svg';
 import PauseIcon from '@/assets/svg/pause.svg';
-import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
+import Animated, {
+  FadeIn,
+  FadeOut,
+  useSharedValue,
+} from 'react-native-reanimated';
 import formatTime from '@/utils/formatTime';
 import {useIsFocused} from '@react-navigation/native';
+import {Slider} from 'react-native-awesome-slider';
 
 interface FeedVideoProps {
   item: FeedVideoType;
@@ -39,6 +43,10 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
 
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
+
+  const animatedMinDuration = useSharedValue(0);
+  const animatedDuration = useSharedValue<number>(0);
+  const animatedCurrentTime = useSharedValue<number>(0);
 
   const [isUIHidden, setIsUIHidden] = useState<boolean>(true);
 
@@ -103,6 +111,9 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
   }) => {
     setDuration(event.seekableDuration);
     setCurrentTime(event.currentTime);
+
+    animatedDuration.value = event.seekableDuration;
+    animatedCurrentTime.value = event.currentTime;
   };
 
   const handleOnPress = useCallback(() => {
@@ -128,6 +139,12 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
     handleHideUI(false);
     setLastTimePressed(new Date().toISOString());
     setRate(1);
+  };
+
+  const handleOnSeek = (value: number) => {
+    if (videoRef.current) {
+      videoRef.current.seek(value);
+    }
   };
 
   return (
@@ -161,15 +178,21 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
               </View>
             </TouchableOpacity>
             <View style={styles.progressBarContainer}>
-              <View style={styles.progressBar}>
-                <View
-                  style={[
-                    styles.activeProgressBar,
-                    {width: `${(currentTime / duration) * 100}%`},
-                  ]}>
-                  <View style={styles.progressBarPointer} />
-                </View>
-              </View>
+              <Slider
+                minimumValue={animatedMinDuration}
+                maximumValue={animatedDuration}
+                progress={animatedCurrentTime}
+                onValueChange={handleOnSeek}
+                onSlidingStart={handleOnPressOut}
+                renderBubble={() => null}
+                thumbWidth={12}
+                theme={{
+                  disableMinTrackTintColor: colors.gray050,
+                  maximumTrackTintColor: 'rgba(255,255,255,0.32)',
+                  minimumTrackTintColor: colors.gray020,
+                  cacheTrackTintColor: colors.gray050,
+                }}
+              />
               <View style={styles.progressBarTimeContainer}>
                 <Text style={styles.progressBarTimeText}>
                   {formatTime(Math.round(currentTime))}
@@ -198,7 +221,10 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
         </View>
       )}
 
-      <Pressable onPressOut={handleOnPressOut} onLongPress={handleOnPressIn}>
+      <Pressable
+        onPressOut={handleOnPressOut}
+        onLongPress={handleOnPressIn}
+        onPress={handleOnPress}>
         <Video
           ref={videoRef}
           source={{

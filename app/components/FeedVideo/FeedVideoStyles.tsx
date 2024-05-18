@@ -60,28 +60,6 @@ const styles = StyleSheet.create({
     marginTop: 35,
     gap: 5,
   },
-  progressBar: {
-    width: '100%',
-    height: 5,
-    borderRadius: 5,
-    backgroundColor: 'rgba(255,255,255,0.32)',
-  },
-  progressBarPointer: {
-    position: 'absolute',
-    right: -2,
-    top: -2,
-    width: 8,
-    height: 8,
-    borderRadius: 8,
-    backgroundColor: 'white',
-  },
-  activeProgressBar: {
-    position: 'relative',
-    flex: 1,
-    height: 5,
-    borderRadius: 5,
-    backgroundColor: 'white',
-  },
   progressBarTimeContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
