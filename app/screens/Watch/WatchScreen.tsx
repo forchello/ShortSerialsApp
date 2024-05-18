@@ -1,19 +1,11 @@
 import React, {useMemo, useRef, useState} from 'react';
-import {
-  FlatList,
-  Image,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  Pressable,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {FlatList, Text, TouchableOpacity, View, ViewToken} from 'react-native';
 import styles from './WatchScreenStyles';
 import {WatchScreenProps} from '@/types/navigations';
 import FeedVideo from '@/components/FeedVideo/FeedVideo';
 import {FeedVideoType} from '@/types/feedVideos';
 import CloseIcon from '@/assets/svg/close.svg';
+import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 
 const data: FeedVideoType[] = [
   {
@@ -62,6 +54,8 @@ const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
   const {videoId} = route.params;
 
   const [activeItemId, setActiveItemId] = useState<string>(data[0].id);
+  const [prevItemId, setPrevItemId] = useState<string>(data[0].id);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const currentItem = useMemo(() => {
     return data.find(item => item.id === activeItemId);
@@ -74,9 +68,20 @@ const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
   const viewabilityConfigCallbackPairs = useRef([
     {
       viewabilityConfig: {itemVisiblePercentThreshold: 50},
-      onViewableItemsChanged: ({changed, viewableItems}) => {
-        if (viewableItems.length > 0 && viewableItems[0].isViewable) {
-          setActiveItemId(viewableItems[0].item.id);
+      onViewableItemsChanged: ({
+        changed,
+        viewableItems,
+      }: {
+        changed: ViewToken[];
+        viewableItems: ViewToken[];
+      }) => {
+        if (changed.length > 0) {
+          if (changed[0].isViewable) {
+            setActiveItemId(changed[0].item.id);
+          }
+          if (changed[1]) {
+            setPrevItemId(changed[1].item.id);
+          }
         }
       },
     },
@@ -94,16 +99,30 @@ const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
     }
   };
 
+  const handleOnFirstItemLoaded = () => {
+    setIsLoaded(true);
+  };
+
   return (
     <View style={styles.container}>
-      <View style={styles.headerContainer}>
+      <Animated.View
+        style={styles.headerContainer}
+        entering={FadeIn.delay(200).duration(200)}
+        exiting={FadeOut.delay(200).duration(200)}>
         <View style={styles.headerCloseIcon}>
           <TouchableOpacity onPress={handleOnExit}>
             <CloseIcon />
           </TouchableOpacity>
         </View>
-        <Text style={styles.headerTitle}> {currentItem?.name} </Text>
-      </View>
+        {isLoaded && (
+          <Animated.Text
+            style={styles.headerTitle}
+            entering={FadeIn.delay(200).duration(200)}
+            exiting={FadeOut.delay(200).duration(200)}>
+            {currentItem?.name}
+          </Animated.Text>
+        )}
+      </Animated.View>
 
       <FlatList
         data={data}
@@ -111,8 +130,14 @@ const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
         showsVerticalScrollIndicator={false}
         keyExtractor={item => item.id}
         renderItem={({item}) => (
-          <FeedVideo item={item} activeItemId={activeItemId} />
+          <FeedVideo
+            item={item}
+            activeItemId={activeItemId}
+            prevItemId={prevItemId}
+            onFirstItemLoaded={handleOnFirstItemLoaded}
+          />
         )}
+        scrollEnabled={isLoaded}
         viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
         onEndReached={handleOnEndReached}
         onEndReachedThreshold={3}
