@@ -53,5 +53,12 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>NunitoSans10pt-Bold.ttf</string>
+		<string>NunitoSans10pt-SemiBold.ttf</string>
+		<string>NunitoSans10pt-ExtraBold.ttf</string>
+		<string>NunitoSans10pt-Regular.ttf</string>
+	</array>
 </dict>
 </plist>
