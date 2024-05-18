@@ -2,19 +2,19 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import {Provider} from 'react-redux';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import RootContainer from './screens/RootContainer/RootContainer';
+import RootContainer from '@/components/RootContainer/RootContainer';
 import {NavigationContainer} from '@react-navigation/native';
 import {ScreenNames} from './constants';
 import {createStackNavigator} from '@react-navigation/stack';
-import Test from './components/Test';
+import HomeScreen from './screens/Home/HomeScreen';
+import WatchScreen from './screens/Watch/WatchScreen';
 
 const App = () => {
   return (
     // <Provider store={store}>
     <GestureHandlerRootView style={styles.gestureContainer}>
       <RootContainer>
-        <Test />
-        {/* <AppNavigation /> */}
+        <AppNavigation />
       </RootContainer>
     </GestureHandlerRootView>
     // </Provider>
@@ -38,8 +38,8 @@ const AppNavigation = () => {
           cardStyleInterpolator: forFade,
         }}
         initialRouteName={ScreenNames.Home}>
-        <Stack.Screen name={ScreenNames.Home} component={() => null} />
-        <Stack.Screen name={ScreenNames.Watch} component={() => null} />
+        <Stack.Screen name={ScreenNames.Home} component={HomeScreen} />
+        <Stack.Screen name={ScreenNames.Watch} component={WatchScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
