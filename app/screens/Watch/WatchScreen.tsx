@@ -1,14 +1,14 @@
 import React, {useMemo, useRef, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View, ViewToken} from 'react-native';
+import {FlatList, TouchableOpacity, View, ViewToken} from 'react-native';
 import styles from './WatchScreenStyles';
 import {WatchScreenProps} from '@/types/navigations';
 import FeedVideo from '@/components/FeedVideo/FeedVideo';
-import {FeedVideoType} from '@/types/feedVideos';
+import {FeedVideosPayload} from '@/types/FeedVideosPayload';
 import CloseIcon from '@/assets/svg/close.svg';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {ScreenNames} from '@/constants';
 
-const data: FeedVideoType[] = [
+const data: FeedVideosPayload[] = [
   {
     id: '1',
     name: 'Episode 1',

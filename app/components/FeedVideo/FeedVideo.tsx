@@ -1,4 +1,4 @@
-import {FeedVideoType} from '@/types/feedVideos';
+import {FeedVideosPayload} from '@/types/FeedVideosPayload';
 import metrics from '@/utils/metrics';
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
@@ -24,7 +24,7 @@ import {useIsFocused} from '@react-navigation/native';
 import {Slider} from 'react-native-awesome-slider';
 
 interface FeedVideoProps {
-  item: FeedVideoType;
+  item: FeedVideosPayload;
   activeItemId: string;
   prevItemId: string;
   onFirstItemLoaded: () => void;
@@ -45,7 +45,7 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
   const [currentTime, setCurrentTime] = useState<number>(0);
 
   const [videoResizeMode, setVideoResizeMode] = useState<ResizeMode>(
-    ResizeMode.CONTAIN,
+    ResizeMode.COVER,
   );
 
   const animatedMinDuration = useSharedValue(0);

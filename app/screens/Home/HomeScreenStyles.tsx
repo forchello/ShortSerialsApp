@@ -1,5 +1,7 @@
 import {colors, fonts} from '@/theme';
+import metrics from '@/utils/metrics';
 import {StyleSheet} from 'react-native';
+import {initialWindowMetrics} from 'react-native-safe-area-context';
 
 const styles = StyleSheet.create({
   container: {
@@ -12,8 +14,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   headerContainer: {
-    paddingVertical: 15,
-    paddingHorizontal: 20,
+    marginTop: initialWindowMetrics ? initialWindowMetrics?.insets.top : 30,
+    paddingHorizontal: metrics.appPaddingHorizontal,
+    height: 60,
     width: '100%',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -25,7 +28,6 @@ const styles = StyleSheet.create({
     height: 32,
     justifyContent: 'center',
     alignItems: 'center',
-    // backgroundColor: 'yellow',
   },
 });
 

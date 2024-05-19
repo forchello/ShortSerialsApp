@@ -10,6 +10,8 @@ const metrics = {
   ...Dimensions.get('window'),
   screenHeight: height,
   screenWidth: width,
+  appPaddingHorizontal: 20,
+  appPaddingVertical: 15,
   //   scale,
   //   fontScale,
 };
