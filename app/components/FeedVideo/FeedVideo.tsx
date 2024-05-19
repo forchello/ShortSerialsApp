@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Video, {VideoRef} from 'react-native-video';
+import Video, {ResizeMode, VideoRef} from 'react-native-video';
 import styles from './FeedVideoStyles';
 import {colors, images} from '@/theme';
 
@@ -147,6 +147,15 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
     }
   };
 
+  const handleOnSeekComplete = useCallback(() => {
+    if (videoRef.current) {
+      if (isPaused) {
+        videoRef.current.resume();
+        setIsPaused(false);
+      }
+    }
+  }, [isPaused]);
+
   return (
     <>
       {isLoaded && (
@@ -183,6 +192,7 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
                 maximumValue={animatedDuration}
                 progress={animatedCurrentTime}
                 onValueChange={handleOnSeek}
+                onSlidingComplete={handleOnSeekComplete}
                 onSlidingStart={handleOnPressOut}
                 renderBubble={() => null}
                 thumbWidth={12}
@@ -231,9 +241,11 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
             uri: item.uri,
           }}
           style={{
-            height: metrics.screenHeight,
-            width: metrics.screenWidth,
+            height: metrics.height,
+            width: metrics.width,
+            backgroundColor: colors.background,
           }}
+          resizeMode={ResizeMode.CONTAIN} // can make button with resizeMode changing (like YouTube or Netflix)
           paused={
             activeItemId !== item.id ||
             (activeItemId === item.id && isPaused) ||
