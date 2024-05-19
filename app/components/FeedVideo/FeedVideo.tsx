@@ -44,6 +44,10 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
 
+  const [videoResizeMode, setVideoResizeMode] = useState<ResizeMode>(
+    ResizeMode.CONTAIN,
+  );
+
   const animatedMinDuration = useSharedValue(0);
   const animatedDuration = useSharedValue<number>(0);
   const animatedCurrentTime = useSharedValue<number>(0);
@@ -156,6 +160,14 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
     }
   }, [isPaused]);
 
+  const handleOnFullScreen = useCallback(() => {
+    if (videoResizeMode === ResizeMode.CONTAIN) {
+      setVideoResizeMode(ResizeMode.COVER);
+    } else {
+      setVideoResizeMode(ResizeMode.CONTAIN);
+    }
+  }, [videoResizeMode]);
+
   return (
     <>
       {isLoaded && (
@@ -202,6 +214,7 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
                   minimumTrackTintColor: colors.gray020,
                   cacheTrackTintColor: colors.gray050,
                 }}
+                containerStyle={styles.progressBar}
               />
               <View style={styles.progressBarTimeContainer}>
                 <Text style={styles.progressBarTimeText}>
@@ -245,7 +258,7 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
             width: metrics.width,
             backgroundColor: colors.background,
           }}
-          resizeMode={ResizeMode.CONTAIN} // can make button with resizeMode changing (like YouTube or Netflix)
+          resizeMode={videoResizeMode} // can make button with resizeMode changing (like YouTube or Netflix), but not found in design
           paused={
             activeItemId !== item.id ||
             (activeItemId === item.id && isPaused) ||

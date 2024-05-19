@@ -4,11 +4,12 @@ import styles from './HomeScreenStyles';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {HomeScreenProps} from '@/types/navigations';
 import SearchIcon from '@/assets/svg/search.svg';
+import {ScreenNames} from '@/constants';
 // import GiftIcon from '@/assets/svg/gift.svg';
 
 const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const handleWatch = () => {
-    navigation.navigate('Watch', {
+    navigation.navigate(ScreenNames.Watch, {
       videoId: '123',
     });
   };

@@ -6,6 +6,7 @@ import FeedVideo from '@/components/FeedVideo/FeedVideo';
 import {FeedVideoType} from '@/types/feedVideos';
 import CloseIcon from '@/assets/svg/close.svg';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
+import {ScreenNames} from '@/constants';
 
 const data: FeedVideoType[] = [
   {
@@ -62,7 +63,7 @@ const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
   }, [activeItemId]);
 
   const handleHome = () => {
-    navigation.navigate('Home');
+    navigation.navigate(ScreenNames.Home);
   };
 
   const viewabilityConfigCallbackPairs = useRef([
@@ -95,7 +96,7 @@ const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
     if (navigation.canGoBack()) {
       navigation.goBack();
     } else {
-      navigation.navigate('Home');
+      navigation.navigate(ScreenNames.Home);
     }
   };
 

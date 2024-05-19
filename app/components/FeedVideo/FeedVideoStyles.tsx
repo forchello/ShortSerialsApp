@@ -70,6 +70,9 @@ const styles = StyleSheet.create({
     fontFamily: fonts.NunitoSansSemiBold,
     fontSize: 16,
   },
+  progressBar: {
+    borderRadius: 12,
+  },
 });
 
 export default styles;
