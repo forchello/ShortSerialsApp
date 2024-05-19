@@ -8,7 +8,7 @@ interface FastImageBackgroundProps extends FastImageProps {
   imageStyle?: StyleProp<ImageStyle>;
 }
 
-const FastImageBackground: React.FC<FastImageBackgroundProps> = ({
+export const FastImageBackground: React.FC<FastImageBackgroundProps> = ({
   children,
   style = {},
   imageStyle,

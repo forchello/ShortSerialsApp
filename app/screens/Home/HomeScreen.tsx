@@ -5,6 +5,7 @@ import {HomeScreenProps} from '@/types/navigations';
 import SearchIcon from '@/assets/svg/search.svg';
 import {ScreenNames} from '@/constants';
 import BannersSection from '@/sections/Banners/BannersSection';
+import ContinueWatchSection from '@/sections/ContinueWatch/ContinueWatchSection';
 // import GiftIcon from '@/assets/svg/gift.svg';
 
 const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
@@ -33,6 +34,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
 
       <ScrollView>
         <BannersSection />
+        <ContinueWatchSection />
       </ScrollView>
     </View>
   );

@@ -55,7 +55,7 @@ const BannersSection = () => {
   );
 };
 
-const CarouselItem = ({item, index}: {item: IData; index: number}) => {
+const CarouselItem = ({item, index}: {item: BannerPayload; index: number}) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const handleOnLoad = () => {
