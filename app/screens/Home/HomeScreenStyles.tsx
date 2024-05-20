@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
     paddingBottom: initialWindowMetrics
-      ? initialWindowMetrics?.insets.bottom + metrics.appPaddingVertical
+      ? initialWindowMetrics?.insets.bottom
       : metrics.appPaddingVertical,
   },
   headerTitle: {
