@@ -9,6 +9,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     paddingTop: metrics.appPaddingVertical / 2,
     paddingBottom: metrics.appPaddingVertical + metrics.appPaddingVertical / 2,
+    paddingLeft: metrics.appPaddingHorizontal,
   },
 });
 

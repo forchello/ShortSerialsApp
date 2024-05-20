@@ -1,11 +1,13 @@
 import React from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import styles from './HomeScreenStyles';
 import {HomeScreenProps} from '@/types/navigations';
 import SearchIcon from '@/assets/svg/search.svg';
 import {ScreenNames} from '@/constants';
 import BannersSection from '@/sections/Banners/BannersSection';
 import ContinueWatchSection from '@/sections/ContinueWatch/ContinueWatchSection';
+import CategorySection from '@/sections/Category/CategorySection';
+import {BookCategory} from '@/types/BooksPayload';
 // import GiftIcon from '@/assets/svg/gift.svg';
 
 const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
@@ -32,9 +34,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
         </TouchableOpacity>
       </View>
 
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <BannersSection />
         <ContinueWatchSection />
+        <CategorySection category={BookCategory.tranding} />
+        <CategorySection category={BookCategory.romance} />
       </ScrollView>
     </View>
   );

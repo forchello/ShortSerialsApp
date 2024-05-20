@@ -9,6 +9,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from './screens/Home/HomeScreen';
 import WatchScreen from './screens/Watch/WatchScreen';
 
+import '@/i18n/i18n';
+
 const App = () => {
   return (
     // <Provider store={store}>

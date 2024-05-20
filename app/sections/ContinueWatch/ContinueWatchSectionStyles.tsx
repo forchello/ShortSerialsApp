@@ -6,7 +6,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingVertical: metrics.appPaddingVertical,
-    paddingHorizontal: metrics.appPaddingHorizontal,
   },
   contentWrapper: {
     flex: 1,
@@ -17,6 +16,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 6,
     gap: 10,
+    marginHorizontal: metrics.appPaddingHorizontal,
   },
   contentContainer: {
     alignItems: 'center',
@@ -26,6 +26,9 @@ const styles = StyleSheet.create({
   },
   contentTextContainer: {
     flexDirection: 'column',
+    paddingLeft: 4,
+    gap: 4,
+    paddingBottom: 4,
   },
   contentTitle: {
     fontFamily: fonts.NunitoSansBold,
@@ -35,7 +38,6 @@ const styles = StyleSheet.create({
   contentDescription: {
     fontFamily: fonts.NunitoSansRegular,
     fontSize: 14,
-    paddingLeft: 6,
     color: '#E1E3E6',
   },
   arrowIcon: {

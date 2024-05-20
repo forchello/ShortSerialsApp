@@ -7,6 +7,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
+    paddingBottom: initialWindowMetrics
+      ? initialWindowMetrics?.insets.bottom + metrics.appPaddingVertical
+      : metrics.appPaddingVertical,
   },
   headerTitle: {
     color: colors.gray020,

@@ -3,7 +3,7 @@ import {Pressable, Text, View} from 'react-native';
 import styles from './BannersSectionStyles';
 import metrics from '@/utils/metrics';
 import Carousel from 'react-native-reanimated-carousel';
-import Animated from 'react-native-reanimated';
+import Animated, {useSharedValue, withTiming} from 'react-native-reanimated';
 
 import FastImageBackground from '@/components/FastImageBackground/FastImageBackground';
 
@@ -48,7 +48,7 @@ const BannersSection = () => {
         renderItem={CarouselItem}
         pagingEnabled
         snapEnabled
-        autoPlayInterval={3000}
+        autoPlayInterval={10000}
         scrollAnimationDuration={1000}
       />
     </View>
@@ -57,41 +57,58 @@ const BannersSection = () => {
 
 const CarouselItem = ({item, index}: {item: BannerPayload; index: number}) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const scale = useSharedValue<number>(1);
 
   const handleOnLoad = () => {
-    setIsLoaded(true);
+    setTimeout(() => {
+      setIsLoaded(true);
+    }, 5000);
   };
 
-  const handleOnPress = () => {
-    console.log('hello');
+  const handleOnPressIn = () => {
+    scale.value = withTiming(0.97, {duration: 200});
+  };
+
+  const handleOnPressOut = () => {
+    scale.value = withTiming(1, {duration: 200});
+    // logic for continue
+    console.log('continue');
   };
 
   return (
-    <FastImageBackground
-      key={index}
-      onLoad={handleOnLoad}
-      source={item.image}
-      style={styles.carouselItemContainer}>
-      <>
-        <Animated.Image source={images.gradient} style={styles.gradient} />
+    <Animated.View
+      style={[styles.carouselItemContainer, {transform: [{scale: scale}]}]}>
+      <Pressable
+        onPressIn={handleOnPressIn}
+        onPressOut={handleOnPressOut}
+        disabled={!isLoaded}>
+        <FastImageBackground
+          key={index}
+          onLoad={handleOnLoad}
+          source={item.image}
+          style={{width: '100%', height: '100%'}}>
+          <>
+            <Animated.Image source={images.gradient} style={styles.gradient} />
 
-        {!isLoaded ? (
-          <View style={styles.skeletonContainer}>
-            <AppIcon />
-          </View>
-        ) : (
-          <Pressable
-            onPress={handleOnPress}
-            style={styles.itemContentContainer}>
-            <VideoTag text={item.tag} />
-            <View style={styles.contentTextContainer}>
-              <Text style={styles.contentTitle}> {item.title} </Text>
-              <Text style={styles.contentDescription}>{item.description}</Text>
-            </View>
-          </Pressable>
-        )}
-      </>
-    </FastImageBackground>
+            {!isLoaded ? (
+              <View style={styles.skeletonContainer}>
+                <AppIcon />
+              </View>
+            ) : (
+              <View style={styles.itemContentContainer}>
+                <VideoTag text={item.tag} />
+                <View style={styles.contentTextContainer}>
+                  <Text style={styles.contentTitle}>{item.title}</Text>
+                  <Text style={styles.contentDescription}>
+                    {item.description}
+                  </Text>
+                </View>
+              </View>
+            )}
+          </>
+        </FastImageBackground>
+      </Pressable>
+    </Animated.View>
   );
 };
 

@@ -8,6 +8,7 @@ import SectionTitle from '@/components/SectionTitle/SectionTitle';
 import FastImage from 'react-native-fast-image';
 
 import ArrowIcon from '@/assets/svg/arrow.svg';
+import {useTranslation} from 'react-i18next';
 
 const ContinueWatchSection = () => {
   const continueItem = {
@@ -19,8 +20,10 @@ const ContinueWatchSection = () => {
 
   const scale = useSharedValue<number>(1);
 
+  const {t} = useTranslation();
+
   const handleOnPressIn = () => {
-    scale.value = withTiming(1.025, {duration: 200});
+    scale.value = withTiming(0.97, {duration: 200});
   };
 
   const handleOnPressOut = () => {
@@ -35,7 +38,7 @@ const ContinueWatchSection = () => {
 
   return (
     <View style={styles.container}>
-      <SectionTitle title="Continue Watching" />
+      <SectionTitle title={t('category.continueWatching')} />
       <Pressable onPressIn={handleOnPressIn} onPressOut={handleOnPressOut}>
         <Animated.View
           style={[styles.contentWrapper, {transform: [{scale: scale}]}]}>
@@ -43,7 +46,7 @@ const ContinueWatchSection = () => {
           <FastImage source={continueItem.image} style={styles.image} />
           <View style={styles.contentContainer}>
             <View style={styles.contentTextContainer}>
-              <Text style={styles.contentTitle}> {continueItem.title} </Text>
+              <Text style={styles.contentTitle}>{continueItem.title}</Text>
               <Text style={styles.contentDescription}>
                 {continueItem.description}
               </Text>

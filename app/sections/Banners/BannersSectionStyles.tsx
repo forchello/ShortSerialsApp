@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     zIndex: 1,
-    paddingHorizontal: 15,
+    paddingHorizontal: 16,
     paddingVertical: 10,
     justifyContent: 'space-between',
   },
@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
   contentDescription: {
     fontFamily: fonts.NunitoSansRegular,
     fontSize: 16,
-    paddingLeft: 8,
     color: '#C4C8CC',
   },
 });
