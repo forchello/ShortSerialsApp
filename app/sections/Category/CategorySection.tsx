@@ -72,8 +72,7 @@ const CarouselItem = ({item, index}: {item: BookType; index: number}) => {
   const {t} = useTranslation();
 
   const handleOnPressIn = () => {
-    const newScale = !!item.upcoming ? 0.98 : 0.95;
-    scale.value = withTiming(newScale, {duration: 200});
+    scale.value = withTiming(0.95, {duration: 200});
   };
 
   const handleOnPressOut = () => {
@@ -90,7 +89,7 @@ const CarouselItem = ({item, index}: {item: BookType; index: number}) => {
     <Pressable
       onPressIn={handleOnPressIn}
       onPressOut={handleOnPressOut}
-      disabled={!isLoaded}>
+      disabled={!isLoaded || !!item.upcoming}>
       <Animated.View
         style={[
           styles.carouselItemContainer,
