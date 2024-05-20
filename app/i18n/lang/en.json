@@ -17,6 +17,8 @@
     "category": {
         "continueWatching": "Continue Watching",
         "tranding": "Tranding now",
-        "romance": "Top Romance"
-    }
+        "romance": "Top Romance",
+        "comingSoon": "Coming Soon"
+    },
+    "videoNotFound": "Sorry, this video\nis unavailable"
 }

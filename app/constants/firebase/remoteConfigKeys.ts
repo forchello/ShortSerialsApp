@@ -1,3 +1,3 @@
-const remoteConfigKeys = ['test'];
+const remoteConfigKeys = ['home_sections_order'];
 
 export default remoteConfigKeys;

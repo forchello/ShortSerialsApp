@@ -11,20 +11,24 @@ import AppIcon from '@/assets/svg/logo.svg';
 import {images} from '@/theme';
 import VideoTag from '@/components/VideoTag/VideoTag';
 import BannerPayload from '@/types/BannersPayload';
+import {useNavigation} from '@react-navigation/native';
+import {ScreenNames} from '@/constants';
+import {RootStackParamList} from '@/types/navigations';
+import {StackNavigationProp} from '@react-navigation/stack';
 
 const BANNER_PHOTO_WIDTH = 328;
 const BANNER_PHOTO_HEIGHT = 216;
 
 const data: BannerPayload[] = [
   {
-    id: 1,
+    id: 'lethel_limits_s1',
     title: 'Lethal Limits 1',
     description: "Dustin's Gamble",
     tag: 'romance',
     image: require('@/assets/img/bannerPhoto.png'),
   },
   {
-    id: 2,
+    id: 'lethel_limits_s2',
     title: 'Lethal Limits 2',
     description: "Dustin's Gamble",
     tag: 'romance',
@@ -59,10 +63,11 @@ const CarouselItem = ({item, index}: {item: BannerPayload; index: number}) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const scale = useSharedValue<number>(1);
 
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
+
   const handleOnLoad = () => {
-    setTimeout(() => {
-      setIsLoaded(true);
-    }, 5000);
+    setIsLoaded(true);
   };
 
   const handleOnPressIn = () => {
@@ -71,8 +76,12 @@ const CarouselItem = ({item, index}: {item: BannerPayload; index: number}) => {
 
   const handleOnPressOut = () => {
     scale.value = withTiming(1, {duration: 200});
-    // logic for continue
-    console.log('continue');
+  };
+
+  const handleOnPress = () => {
+    navigation.navigate(ScreenNames.Watch, {
+      serialId: item.id,
+    });
   };
 
   return (
@@ -81,6 +90,7 @@ const CarouselItem = ({item, index}: {item: BannerPayload; index: number}) => {
       <Pressable
         onPressIn={handleOnPressIn}
         onPressOut={handleOnPressOut}
+        onPress={handleOnPress}
         disabled={!isLoaded}>
         <FastImageBackground
           key={index}

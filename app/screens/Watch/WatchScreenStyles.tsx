@@ -10,6 +10,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: colors.background,
   },
+  notFoundContainer: {
+    height: metrics.height,
+    width: metrics.width,
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.background,
+  },
+  notFoundTitle: {
+    color: colors.gray020,
+    fontFamily: fonts.NunitoSansBold,
+    fontSize: 24,
+    textAlign: 'center',
+  },
   headerTitle: {
     color: colors.gray020,
     fontFamily: fonts.NunitoSansBold,

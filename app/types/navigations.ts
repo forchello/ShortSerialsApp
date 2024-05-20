@@ -4,7 +4,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 // Определите параметры для каждого экрана
 export type RootStackParamList = {
   Home: undefined; // Нет параметров
-  Watch: {videoId: string}; // Параметр videoId
+  Watch: {serialId: string; episodeId?: string};
 };
 
 // Типы для пропсов навигации и маршрутов для экрана Home
