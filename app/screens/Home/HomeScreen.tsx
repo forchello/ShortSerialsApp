@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import styles from './HomeScreenStyles';
 import {HomeScreenProps} from '@/types/navigations';
 import SearchIcon from '@/assets/svg/search.svg';
