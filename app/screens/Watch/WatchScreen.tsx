@@ -1,15 +1,15 @@
 import React, {RefObject, useEffect, useMemo, useRef, useState} from 'react';
-import {FlatList, Text, TouchableOpacity, View, ViewToken} from 'react-native';
+import {FlatList, Text, View, ViewToken} from 'react-native';
 import styles from './WatchScreenStyles';
 import {WatchScreenProps} from '@/types/navigations';
 import FeedVideo from '@/components/FeedVideo/FeedVideo';
-import CloseIcon from '@/assets/svg/close.svg';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {ScreenNames} from '@/constants';
 import {useTranslation} from 'react-i18next';
 import {useAppSelector} from '@/redux/hooks';
 import {EpisodeType} from '@/types/redux';
 import {VideoRef} from 'react-native-video';
+import PressableCloseIcon from '@/components/PressableCloseIcon/PressableCloseIcon';
 
 const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
   const {serialId, episodeId, time} = route.params;
@@ -40,11 +40,10 @@ const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
           style={styles.headerContainer}
           entering={FadeIn.delay(200).duration(200)}
           exiting={FadeOut.delay(200).duration(200)}>
-          <View style={styles.headerCloseIcon}>
-            <TouchableOpacity onPress={handleOnExit}>
-              <CloseIcon />
-            </TouchableOpacity>
-          </View>
+          <PressableCloseIcon
+            onPress={handleOnExit}
+            containerStyles={styles.headerCloseIcon}
+          />
         </Animated.View>
 
         <Text style={styles.notFoundTitle}>{t('videoNotFound')}</Text>
@@ -140,11 +139,10 @@ const WatchingContent = ({
         style={styles.headerContainer}
         entering={FadeIn.delay(200).duration(200)}
         exiting={FadeOut.delay(200).duration(200)}>
-        <View style={styles.headerCloseIcon}>
-          <TouchableOpacity onPress={onExit}>
-            <CloseIcon />
-          </TouchableOpacity>
-        </View>
+        <PressableCloseIcon
+          onPress={onExit}
+          containerStyles={styles.headerCloseIcon}
+        />
         {isLoaded && (
           <Animated.Text
             style={styles.headerTitle}
