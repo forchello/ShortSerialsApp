@@ -23,7 +23,11 @@ const RootContainer = (props: Props) => {
           RNBootSplash.hide({fade: true});
         });
       })
-      .catch(console.log);
+      .catch(() => {
+        dispatch(getStorageApp()).then(() => {
+          RNBootSplash.hide({fade: true});
+        });
+      });
   }, []);
 
   return (
