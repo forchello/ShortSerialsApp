@@ -12,6 +12,21 @@ import {BookCategory} from '@/types/BooksPayload';
 const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const handleSearch = () => {};
 
+  const sectionsOrder = [
+    'banner',
+    'continue_watch',
+    'tranding',
+    'romance',
+    'coming_soon',
+  ];
+
+  const sectionsMap: Record<string, JSX.Element> = {
+    banner: <BannersSection />,
+    continue_watch: <ContinueWatchSection />,
+    tranding: <CategorySection category={BookCategory.tranding} />,
+    romance: <CategorySection category={BookCategory.romance} />,
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
@@ -26,10 +41,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <BannersSection />
-        <ContinueWatchSection />
-        <CategorySection category={BookCategory.tranding} />
-        <CategorySection category={BookCategory.romance} />
+        {sectionsOrder.map(section => sectionsMap[section])}
       </ScrollView>
     </View>
   );
