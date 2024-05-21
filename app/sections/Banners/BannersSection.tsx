@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Pressable, Text, View} from 'react-native';
+import {ImageSourcePropType, Pressable, Text, View} from 'react-native';
 import styles from './BannersSectionStyles';
 import metrics from '@/utils/metrics';
 import Carousel from 'react-native-reanimated-carousel';
@@ -16,6 +16,7 @@ import {RootStackParamList} from '@/types/navigations';
 import {StackNavigationProp} from '@react-navigation/stack';
 import {HomeBannerType} from '@/types/redux';
 import {useAppSelector} from '@/redux/hooks';
+import {Source} from 'react-native-fast-image';
 
 const BANNER_PHOTO_WIDTH = 328;
 const BANNER_PHOTO_HEIGHT = 216;
@@ -83,10 +84,13 @@ const CarouselItem = ({item, index}: {item: HomeBannerType; index: number}) => {
         <FastImageBackground
           key={index}
           onLoad={handleOnLoad}
-          source={images[item.id]}
+          source={images[item.id] as Source}
           style={{width: '100%', height: '100%'}}>
           <>
-            <Animated.Image source={images.gradient} style={styles.gradient} />
+            <Animated.Image
+              source={images.gradient as ImageSourcePropType}
+              style={styles.gradient}
+            />
 
             {!isLoaded ? (
               <View style={styles.skeletonContainer}>

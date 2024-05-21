@@ -19,6 +19,7 @@ export interface HomeBannerType {
 export type RemoteConfigType = {
   home_sections_order: HomeSectionOrderType;
   home_banners: HomeBannerType[];
+  home_sections_data: SerialType[];
 };
 
 export type ContinueWatchType = {
@@ -26,6 +27,18 @@ export type ContinueWatchType = {
   episodeId: string;
   time: number;
 } | null;
+
+export enum SerialCategory {
+  tranding = 'tranding',
+  romance = 'romance',
+}
+
+export interface SerialType {
+  id: string;
+  title: string;
+  category: string;
+  upcoming?: number; // unix time
+}
 
 export interface AppStateProps {
   remoteConfig: RemoteConfigType;

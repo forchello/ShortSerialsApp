@@ -5,7 +5,7 @@ import Animated, {useSharedValue, withTiming} from 'react-native-reanimated';
 import styles from './ContinueWatchSectionStyles';
 
 import SectionTitle from '@/components/SectionTitle/SectionTitle';
-import FastImage from 'react-native-fast-image';
+import FastImage, {Source} from 'react-native-fast-image';
 
 import ArrowIcon from '@/assets/svg/arrow.svg';
 import {useTranslation} from 'react-i18next';
@@ -71,7 +71,7 @@ const ContinueWatchSection = () => {
               style={[styles.contentWrapper, {transform: [{scale: scale}]}]}>
               {/* use source={uri: '...'} for remote images */}
               <FastImage
-                source={images[continueWatchItem.id]}
+                source={images[continueWatchItem.id] as Source}
                 style={styles.image}
               />
               <View style={styles.contentContainer}>

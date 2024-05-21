@@ -2,7 +2,7 @@ import {AsyncActionError, AppStateProps} from '@/types/redux';
 import {AppDispatch} from '../store';
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import StorageKeys from '@/constants/StorageKeys';
+import {StorageKeys} from '@/constants';
 import initialState from './initialState';
 
 const AsyncTypes = {

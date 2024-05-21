@@ -6,8 +6,8 @@ import SearchIcon from '@/assets/svg/search.svg';
 import BannersSection from '@/sections/Banners/BannersSection';
 import ContinueWatchSection from '@/sections/ContinueWatch/ContinueWatchSection';
 import CategorySection from '@/sections/Category/CategorySection';
-import {BookCategory} from '@/types/BooksPayload';
 import {useAppSelector} from '@/redux/hooks';
+import {SerialCategory} from '@/types/redux';
 // import GiftIcon from '@/assets/svg/gift.svg';
 
 const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
@@ -18,8 +18,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const sectionsMap: Record<string, JSX.Element> = {
     banner: <BannersSection />,
     continue_watch: <ContinueWatchSection />,
-    tranding: <CategorySection category={BookCategory.tranding} />,
-    romance: <CategorySection category={BookCategory.romance} />,
+    tranding: <CategorySection category={SerialCategory.tranding} />,
+    romance: <CategorySection category={SerialCategory.romance} />,
   };
 
   return (

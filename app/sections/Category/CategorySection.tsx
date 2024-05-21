@@ -14,15 +14,16 @@ import FastImage, {Source} from 'react-native-fast-image';
 
 import Carousel from 'react-native-reanimated-carousel';
 import metrics from '@/utils/metrics';
-import {BOOKS_MOCKED_DATA} from '@/constants/BooksMockedData';
 import sortBooksByCategory from '@/utils/sortBooksByCategory';
-import {BookType} from '@/types/BooksPayload';
+import {SerialType} from '@/types/redux';
 import {useTranslation} from 'react-i18next';
 
 import {BlurView} from '@react-native-community/blur';
 
 import AppIcon from '@/assets/svg/logo.svg';
 import LockIcon from '@/assets/svg/lock.svg';
+import {useAppSelector} from '@/redux/hooks';
+import {images} from '@/theme';
 
 const BANNER_BOOK_WIDTH = 120;
 const BANNER_BOOK_HEIGHT = 150;
@@ -33,7 +34,9 @@ interface CategorySectionProps {
 }
 
 const CategorySection: React.FC<CategorySectionProps> = ({category}) => {
-  const data = sortBooksByCategory(BOOKS_MOCKED_DATA, category);
+  const remoteConfig = useAppSelector(state => state.app.remoteConfig);
+
+  const data = sortBooksByCategory(remoteConfig.home_sections_data, category);
 
   const {t} = useTranslation();
 
@@ -54,7 +57,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({category}) => {
           style={{
             width: metrics.screenWidth,
           }}
-          data={sortBooksByCategory(BOOKS_MOCKED_DATA, category)}
+          data={data}
           renderItem={CarouselItem}
           pagingEnabled
           snapEnabled
@@ -65,7 +68,7 @@ const CategorySection: React.FC<CategorySectionProps> = ({category}) => {
   );
 };
 
-const CarouselItem = ({item, index}: {item: BookType; index: number}) => {
+const CarouselItem = ({item, index}: {item: SerialType; index: number}) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const scale = useSharedValue<number>(1);
@@ -109,7 +112,7 @@ const CarouselItem = ({item, index}: {item: BookType; index: number}) => {
         )}
 
         <FastImage
-          source={item.image as Source}
+          source={images[item.id] as Source}
           style={[styles.image, {height: BANNER_BOOK_HEIGHT}]}
           onLoad={handleOnLoad}
         />

@@ -63,6 +63,42 @@ const initialState: AppStateProps = {
         episodes: [],
       },
     ],
+    home_sections_data: [
+      {
+        id: 'serial_1',
+        title: 'Wolfstate chronicles: Alaska, Texas',
+        category: 'tranding',
+      },
+      {
+        id: 'serial_2',
+        title: 'Beautiful Revenge',
+        category: 'tranding',
+        upcoming: 1719889200000,
+      },
+      {
+        id: 'serial_3',
+        title: 'Sin De Rella',
+        category: 'tranding',
+        upcoming: 1719889200000,
+      },
+      {
+        id: 'serial_4',
+        title: "Alpha's Detective",
+        category: 'romance',
+      },
+      {
+        id: 'serial_5',
+        title: 'Trained for Seduction',
+        category: 'romance',
+        upcoming: 1719889200000,
+      },
+      {
+        id: 'serial_6',
+        title: 'Crescent',
+        category: 'romance',
+        upcoming: 1719889200000,
+      },
+    ],
   },
 };
 

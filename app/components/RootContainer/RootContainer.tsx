@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {StatusBar} from 'react-native';
 import RNBootSplash from 'react-native-bootsplash';
 
-import remoteConfigKeys from '@/constants/firebase/remoteConfigKeys';
+import {RemoteConfigKeys} from '@/constants';
 import {useAppDispatch} from '@/redux/hooks';
 import {setRemoteConfig} from '@/redux/app/slice';
 import {getStorageApp} from '@/redux/app/async';
@@ -16,7 +16,7 @@ const RootContainer = (props: Props) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    getRemoteConfig(remoteConfigKeys)
+    getRemoteConfig(RemoteConfigKeys)
       .then(res => {
         dispatch(setRemoteConfig(res));
         dispatch(getStorageApp()).then(() => {
