@@ -16,7 +16,7 @@ const appSlice = createSlice({
         remoteConfig: {...action.payload},
       };
 
-      if (typeof action.payload.home_sections_order.order !== 'object') {
+      if (typeof action.payload.home_sections_order !== 'object') {
         newState.remoteConfig.home_sections_order =
           initialState.remoteConfig.home_sections_order;
       }

@@ -1,13 +1,13 @@
 import {RouteProp} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 
-// Определите параметры для каждого экрана
+// Define parameters for each screen
 export type RootStackParamList = {
-  Home: undefined; // Нет параметров
+  Home: undefined; // No parameters
   Watch: {serialId: string; episodeId?: string; time?: number};
 };
 
-// Типы для пропсов навигации и маршрутов для экрана Home
+// Types for navigation and route props for the Home screen
 type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 
 type HomeScreenRouteProp = RouteProp<RootStackParamList, 'Home'>;
@@ -17,7 +17,7 @@ export type HomeScreenProps = {
   route: HomeScreenRouteProp;
 };
 
-// Типы для пропсов навигации и маршрутов для экрана Watch
+// Types for navigation and route props for the Watch screen
 type WatchScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
   'Watch'

@@ -24,6 +24,10 @@ import AppIcon from '@/assets/svg/logo.svg';
 import LockIcon from '@/assets/svg/lock.svg';
 import {useAppSelector} from '@/redux/hooks';
 import {images} from '@/theme';
+import {RootStackParamList} from '@/types/navigations';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
+import {ScreenNames} from '@/constants';
 
 const BANNER_BOOK_WIDTH = 120;
 const BANNER_BOOK_HEIGHT = 150;
@@ -36,7 +40,11 @@ interface CategorySectionProps {
 const CategorySection: React.FC<CategorySectionProps> = ({category}) => {
   const remoteConfig = useAppSelector(state => state.app.remoteConfig);
 
-  const data = sortBooksByCategory(remoteConfig.home_sections_data, category);
+  const data = sortBooksByCategory(
+    remoteConfig.home_sections_data,
+    remoteConfig.home_banners,
+    category,
+  );
 
   const {t} = useTranslation();
 
@@ -68,11 +76,14 @@ const CategorySection: React.FC<CategorySectionProps> = ({category}) => {
   );
 };
 
-const CarouselItem = ({item, index}: {item: SerialType; index: number}) => {
+const CarouselItem = ({item}: {item: SerialType}) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   const scale = useSharedValue<number>(1);
   const {t} = useTranslation();
+
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
 
   const handleOnPressIn = () => {
     scale.value = withTiming(0.95, {duration: 200});
@@ -80,8 +91,12 @@ const CarouselItem = ({item, index}: {item: SerialType; index: number}) => {
 
   const handleOnPressOut = () => {
     scale.value = withTiming(1, {duration: 200});
-    // logic for continue
-    console.log('continue');
+  };
+
+  const handleOnPress = () => {
+    navigation.navigate(ScreenNames.Watch, {
+      serialId: item.id,
+    });
   };
 
   const handleOnLoad = () => {
@@ -92,6 +107,7 @@ const CarouselItem = ({item, index}: {item: SerialType; index: number}) => {
     <Pressable
       onPressIn={handleOnPressIn}
       onPressOut={handleOnPressOut}
+      onPress={handleOnPress}
       disabled={!isLoaded || !!item.upcoming}>
       <Animated.View
         style={[

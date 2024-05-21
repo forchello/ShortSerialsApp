@@ -14,9 +14,10 @@ import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {ScreenNames} from '@/constants';
 import {RootStackParamList} from '@/types/navigations';
 import {StackNavigationProp} from '@react-navigation/stack';
-import {HomeBannerType} from '@/types/redux';
 import {useAppSelector} from '@/redux/hooks';
 import {Source} from 'react-native-fast-image';
+import {SerialType} from '@/types/redux';
+import {useTranslation} from 'react-i18next';
 
 const BANNER_PHOTO_WIDTH = 328;
 const BANNER_PHOTO_HEIGHT = 216;
@@ -30,7 +31,7 @@ const BannersSection = () => {
     <View style={styles.container}>
       <Carousel
         vertical={false}
-        // loop={false}
+        loop={false}
         autoPlay={isFocused}
         height={BANNER_PHOTO_HEIGHT}
         width={BANNER_PHOTO_WIDTH + metrics.appPaddingHorizontal * 2}
@@ -38,7 +39,15 @@ const BannersSection = () => {
           width: metrics.screenWidth,
         }}
         data={remoteConfig.home_banners}
-        renderItem={CarouselItem}
+        renderItem={({item, index}) => (
+          <CarouselItem
+            itemId={item}
+            index={index}
+            item={remoteConfig.home_sections_data.find(
+              dataItem => dataItem.id === item,
+            )}
+          />
+        )}
         pagingEnabled
         snapEnabled
         autoPlayInterval={10000}
@@ -48,9 +57,19 @@ const BannersSection = () => {
   );
 };
 
-const CarouselItem = ({item, index}: {item: HomeBannerType; index: number}) => {
+const CarouselItem = ({
+  itemId,
+  item,
+  index,
+}: {
+  itemId: string;
+  item?: SerialType;
+  index: number;
+}) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const scale = useSharedValue<number>(1);
+
+  const {t} = useTranslation();
 
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
@@ -69,9 +88,13 @@ const CarouselItem = ({item, index}: {item: HomeBannerType; index: number}) => {
 
   const handleOnPress = () => {
     navigation.navigate(ScreenNames.Watch, {
-      serialId: item.id,
+      serialId: itemId,
     });
   };
+
+  if (!item) {
+    return null;
+  }
 
   return (
     <Animated.View
@@ -98,7 +121,7 @@ const CarouselItem = ({item, index}: {item: HomeBannerType; index: number}) => {
               </View>
             ) : (
               <View style={styles.itemContentContainer}>
-                <VideoTag text={item.tag} />
+                <VideoTag text={t(`tags.${item.category}`)} />
                 <View style={styles.contentTextContainer}>
                   <Text style={styles.contentTitle}>{item.title}</Text>
                   <Text style={styles.contentDescription}>

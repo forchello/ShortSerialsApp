@@ -1,24 +1,12 @@
-interface HomeSectionOrderType {
-  order: string[];
-}
-
 export type EpisodeType = {
   id: string;
   name: string;
   uri: string;
 };
 
-export interface HomeBannerType {
-  id: string;
-  title: string;
-  description: string;
-  tag: string;
-  episodes: EpisodeType[];
-}
-
 export type RemoteConfigType = {
-  home_sections_order: HomeSectionOrderType;
-  home_banners: HomeBannerType[];
+  home_sections_order: string[];
+  home_banners: string[];
   home_sections_data: SerialType[];
 };
 
@@ -36,8 +24,10 @@ export enum SerialCategory {
 export interface SerialType {
   id: string;
   title: string;
+  description: string;
   category: string;
   upcoming?: number; // unix time
+  episodes: EpisodeType[];
 }
 
 export interface AppStateProps {

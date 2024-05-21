@@ -17,13 +17,6 @@ import {useNavigation} from '@react-navigation/native';
 import {ScreenNames} from '@/constants';
 
 const ContinueWatchSection = () => {
-  // const continueItem = {
-  //   id: 1,
-  //   title: 'Boss With Benefits',
-  //   description: 'Kelly Nite',
-  //   image: require('@/assets/img/book_6.png'),
-  // };
-
   const {continueWatch, remoteConfig} = useAppSelector(state => state.app);
   const scale = useSharedValue<number>(1);
 
@@ -43,7 +36,7 @@ const ContinueWatchSection = () => {
   if (!continueWatch) {
     return null;
   } else {
-    const continueWatchItem = remoteConfig.home_banners.find(
+    const continueWatchItem = remoteConfig.home_sections_data.find(
       item => item.id === continueWatch.serialId,
     );
 

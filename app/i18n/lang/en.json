@@ -19,5 +19,9 @@
         "tranding": "Tranding now",
         "romance": "Top Romance"
     },
+    "tags": {
+        "tranding": "tranding",
+        "romance": "romance"
+    },
     "videoNotFound": "Sorry, this video\nis unavailable"
 }

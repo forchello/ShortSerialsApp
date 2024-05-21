@@ -18,7 +18,7 @@ const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
 
   const remoteConfig = useAppSelector(state => state.app.remoteConfig);
 
-  const serialItem = remoteConfig.home_banners.find(
+  const serialItem = remoteConfig.home_sections_data.find(
     item => item.id === serialId,
   );
 

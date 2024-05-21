@@ -36,7 +36,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {remoteConfig.home_sections_order.order.map((value, index) => (
+        {remoteConfig.home_sections_order.map((value, index) => (
           <React.Fragment key={index}>{sectionsMap[value]}</React.Fragment>
         ))}
       </ScrollView>
