@@ -7,18 +7,13 @@ import BannersSection from '@/sections/Banners/BannersSection';
 import ContinueWatchSection from '@/sections/ContinueWatch/ContinueWatchSection';
 import CategorySection from '@/sections/Category/CategorySection';
 import {BookCategory} from '@/types/BooksPayload';
+import {useAppSelector} from '@/redux/hooks';
 // import GiftIcon from '@/assets/svg/gift.svg';
 
 const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
   const handleSearch = () => {};
 
-  const sectionsOrder = [
-    'banner',
-    'continue_watch',
-    'tranding',
-    'romance',
-    'coming_soon',
-  ];
+  const {remoteConfig} = useAppSelector(state => state.app);
 
   const sectionsMap: Record<string, JSX.Element> = {
     banner: <BannersSection />,
@@ -41,7 +36,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({navigation}) => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {sectionsOrder.map(section => sectionsMap[section])}
+        {remoteConfig.home_sections_order.order.map((value, index) => (
+          <React.Fragment key={index}>{sectionsMap[value]}</React.Fragment>
+        ))}
       </ScrollView>
     </View>
   );

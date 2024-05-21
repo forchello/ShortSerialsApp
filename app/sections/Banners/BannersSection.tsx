@@ -10,45 +10,33 @@ import FastImageBackground from '@/components/FastImageBackground/FastImageBackg
 import AppIcon from '@/assets/svg/logo.svg';
 import {images} from '@/theme';
 import VideoTag from '@/components/VideoTag/VideoTag';
-import BannerPayload from '@/types/BannersPayload';
-import {useNavigation} from '@react-navigation/native';
+import {useIsFocused, useNavigation} from '@react-navigation/native';
 import {ScreenNames} from '@/constants';
 import {RootStackParamList} from '@/types/navigations';
 import {StackNavigationProp} from '@react-navigation/stack';
+import {HomeBannerType} from '@/types/redux';
+import {useAppSelector} from '@/redux/hooks';
 
 const BANNER_PHOTO_WIDTH = 328;
 const BANNER_PHOTO_HEIGHT = 216;
 
-const data: BannerPayload[] = [
-  {
-    id: 'lethel_limits_s1',
-    title: 'Lethal Limits 1',
-    description: "Dustin's Gamble",
-    tag: 'romance',
-    image: require('@/assets/img/bannerPhoto.png'),
-  },
-  {
-    id: 'lethel_limits_s2',
-    title: 'Lethal Limits 2',
-    description: "Dustin's Gamble",
-    tag: 'romance',
-    image: require('@/assets/img/bannerPhoto.png'),
-  },
-];
-
 const BannersSection = () => {
+  const isFocused = useIsFocused();
+
+  const remoteConfig = useAppSelector(state => state.app.remoteConfig);
+
   return (
     <View style={styles.container}>
       <Carousel
         vertical={false}
         // loop={false}
-        autoPlay
+        autoPlay={isFocused}
         height={BANNER_PHOTO_HEIGHT}
         width={BANNER_PHOTO_WIDTH + metrics.appPaddingHorizontal * 2}
         style={{
           width: metrics.screenWidth,
         }}
-        data={data}
+        data={remoteConfig.home_banners}
         renderItem={CarouselItem}
         pagingEnabled
         snapEnabled
@@ -59,7 +47,7 @@ const BannersSection = () => {
   );
 };
 
-const CarouselItem = ({item, index}: {item: BannerPayload; index: number}) => {
+const CarouselItem = ({item, index}: {item: HomeBannerType; index: number}) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const scale = useSharedValue<number>(1);
 
@@ -95,7 +83,7 @@ const CarouselItem = ({item, index}: {item: BannerPayload; index: number}) => {
         <FastImageBackground
           key={index}
           onLoad={handleOnLoad}
-          source={item.image}
+          source={images[item.id]}
           style={{width: '100%', height: '100%'}}>
           <>
             <Animated.Image source={images.gradient} style={styles.gradient} />

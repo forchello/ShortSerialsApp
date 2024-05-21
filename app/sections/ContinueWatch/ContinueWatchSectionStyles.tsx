@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     height: 68,
     maxWidth: (68 * 4) / 5,
     borderRadius: 10,
-    backgroundColor: 'red',
+    backgroundColor: colors.skeletonDark,
   },
 });
 

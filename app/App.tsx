@@ -6,16 +6,17 @@ import RootContainer from '@/components/RootContainer/RootContainer';
 import AppNavigation from './navigation/AppNavigation';
 
 import '@/i18n/i18n';
+import {store} from '@/redux/store';
 
 const App = () => {
   return (
-    // <Provider store={store}>
-    <GestureHandlerRootView style={styles.gestureContainer}>
-      <RootContainer>
-        <AppNavigation />
-      </RootContainer>
-    </GestureHandlerRootView>
-    // </Provider>
+    <Provider store={store}>
+      <GestureHandlerRootView style={styles.gestureContainer}>
+        <RootContainer>
+          <AppNavigation />
+        </RootContainer>
+      </GestureHandlerRootView>
+    </Provider>
   );
 };
 

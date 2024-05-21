@@ -1,5 +1,4 @@
 import remoteConfig from '@react-native-firebase/remote-config';
-import DefaultRemoteConfig from '@/constants/firebase/defaultRemoteConfig';
 
 export function setRemoteConfigDefaults() {
   if (__DEV__) {
@@ -7,7 +6,7 @@ export function setRemoteConfigDefaults() {
       minimumFetchIntervalMillis: 0,
     });
   }
-  return remoteConfig().setDefaults(DefaultRemoteConfig);
+  return remoteConfig().setDefaults({});
 }
 
 export function getRemoteConfig(valueToFetch: Array<string>) {

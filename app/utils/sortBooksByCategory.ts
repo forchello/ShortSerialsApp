@@ -1,6 +1,6 @@
-import {BookType, BookCategory} from '@/types/BooksPayload';
+import {BookType} from '@/types/BooksPayload';
 
-const sortBooksByCategory = (data: BookType[], category: BookCategory) => {
+const sortBooksByCategory = (data: BookType[], category: string) => {
   return data.filter(item => item.category === category);
 };
 

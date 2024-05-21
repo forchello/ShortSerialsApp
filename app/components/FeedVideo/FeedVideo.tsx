@@ -1,6 +1,10 @@
-import {FeedVideosPayload} from '@/types/FeedVideosPayload';
-import metrics from '@/utils/metrics';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {
+  RefObject,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   ActivityIndicator,
   Pressable,
@@ -8,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import metrics from '@/utils/metrics';
 import Video, {ResizeMode, VideoRef} from 'react-native-video';
 import styles from './FeedVideoStyles';
 import {colors, images} from '@/theme';
@@ -23,17 +28,24 @@ import formatTime from '@/utils/formatTime';
 import {useIsFocused} from '@react-navigation/native';
 import {Slider} from 'react-native-awesome-slider';
 
+import throttle from 'lodash/throttle';
+import {useAppDispatch} from '@/redux/hooks';
+import {setContinueWatch} from '@/redux/app/slice';
+import {EpisodeType} from '@/types/redux';
+
 interface FeedVideoProps {
-  item: FeedVideosPayload;
+  item: EpisodeType;
+  serialId: string;
   activeItemId: string;
   prevItemId: string;
-  onFirstItemLoaded: () => void;
+  onFirstItemLoaded: (ref: RefObject<VideoRef>) => void;
 }
 
 const HIDE_UI_TIME = 5000;
 
 const FeedVideo: React.FC<FeedVideoProps> = ({
   item,
+  serialId,
   activeItemId,
   prevItemId,
   onFirstItemLoaded,
@@ -44,9 +56,8 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
   const [duration, setDuration] = useState<number>(0);
   const [currentTime, setCurrentTime] = useState<number>(0);
 
-  const [videoResizeMode, setVideoResizeMode] = useState<ResizeMode>(
-    ResizeMode.COVER,
-  );
+  //, setVideoResizeMode
+  const [videoResizeMode] = useState<ResizeMode>(ResizeMode.COVER);
 
   const animatedMinDuration = useSharedValue(0);
   const animatedDuration = useSharedValue<number>(0);
@@ -62,6 +73,8 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
   const [rate, setRate] = useState<number>(1);
 
   const videoRef = useRef<VideoRef>(null);
+
+  const dispatch = useAppDispatch();
 
   const isFocused = useIsFocused();
 
@@ -105,19 +118,42 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
     setIsLoaded(true);
     setLastTimePressed(new Date().toISOString());
     if (activeItemId === item.id) {
-      onFirstItemLoaded();
+      onFirstItemLoaded(videoRef);
     }
   };
 
-  const handleOnProgress = (event: {
-    currentTime: number;
-    seekableDuration: number;
-  }) => {
-    setDuration(event.seekableDuration);
-    setCurrentTime(event.currentTime);
+  const makeThrottle = useRef(
+    throttle((time, episodeId) => {
+      dispatch(
+        setContinueWatch({
+          serialId,
+          episodeId,
+          time,
+        }),
+      );
+    }, 5000),
+  );
 
-    animatedDuration.value = event.seekableDuration;
-    animatedCurrentTime.value = event.currentTime;
+  const handleOnProgress = useCallback(
+    (event: {currentTime: number; seekableDuration: number}) => {
+      setDuration(event.seekableDuration);
+      setCurrentTime(event.currentTime);
+
+      animatedDuration.value = event.seekableDuration;
+      animatedCurrentTime.value = event.currentTime;
+
+      if (
+        event.currentTime > 1 &&
+        event.seekableDuration - event.currentTime > 5
+      ) {
+        makeThrottle.current(event.currentTime, activeItemId);
+      }
+    },
+    [activeItemId, animatedCurrentTime, animatedDuration],
+  );
+
+  const handleOnEnd = () => {
+    dispatch(setContinueWatch(null));
   };
 
   const handleOnPress = useCallback(() => {
@@ -160,13 +196,13 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
     }
   }, [isPaused]);
 
-  const handleOnFullScreen = useCallback(() => {
-    if (videoResizeMode === ResizeMode.CONTAIN) {
-      setVideoResizeMode(ResizeMode.COVER);
-    } else {
-      setVideoResizeMode(ResizeMode.CONTAIN);
-    }
-  }, [videoResizeMode]);
+  // const handleOnFullScreen = useCallback(() => {
+  //   if (videoResizeMode === ResizeMode.CONTAIN) {
+  //     setVideoResizeMode(ResizeMode.COVER);
+  //   } else {
+  //     setVideoResizeMode(ResizeMode.CONTAIN);
+  //   }
+  // }, [videoResizeMode]);
 
   return (
     <>
@@ -271,6 +307,7 @@ const FeedVideo: React.FC<FeedVideoProps> = ({
           allowsExternalPlayback={false}
           onLoad={handleOnLoad}
           onProgress={handleOnProgress}
+          onEnd={handleOnEnd}
         />
       </Pressable>
     </>

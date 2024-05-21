@@ -16,7 +16,7 @@ import Carousel from 'react-native-reanimated-carousel';
 import metrics from '@/utils/metrics';
 import {BOOKS_MOCKED_DATA} from '@/constants/BooksMockedData';
 import sortBooksByCategory from '@/utils/sortBooksByCategory';
-import {BookType, BookCategory} from '@/types/BooksPayload';
+import {BookType} from '@/types/BooksPayload';
 import {useTranslation} from 'react-i18next';
 
 import {BlurView} from '@react-native-community/blur';
@@ -29,7 +29,7 @@ const BANNER_BOOK_HEIGHT = 150;
 const BANNER_BOOK_ITEM_HEIGHT = 220;
 
 interface CategorySectionProps {
-  category: BookCategory;
+  category: string;
 }
 
 const CategorySection: React.FC<CategorySectionProps> = ({category}) => {

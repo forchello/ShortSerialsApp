@@ -1,64 +1,26 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {RefObject, useEffect, useMemo, useRef, useState} from 'react';
 import {FlatList, Text, TouchableOpacity, View, ViewToken} from 'react-native';
 import styles from './WatchScreenStyles';
 import {WatchScreenProps} from '@/types/navigations';
 import FeedVideo from '@/components/FeedVideo/FeedVideo';
-import {FeedVideosPayload} from '@/types/FeedVideosPayload';
 import CloseIcon from '@/assets/svg/close.svg';
 import Animated, {FadeIn, FadeOut} from 'react-native-reanimated';
 import {ScreenNames} from '@/constants';
 import {useTranslation} from 'react-i18next';
-
-const data: Record<string, FeedVideosPayload[]> = {
-  lethel_limits_s1: [
-    {
-      id: 'lethel_limits_s1_e1',
-      name: 'Episode 1',
-      uri: 'https://dj0vkl2i4vsbo.cloudfront.net/convert/wife_caught_husband/convertedwife.m3u8',
-    },
-    {
-      id: 'lethel_limits_s1_e2',
-      name: 'Episode 2',
-      uri: 'https://dj0vkl2i4vsbo.cloudfront.net/convert/wife_caught_husband/converted/2wife2.m3u8',
-    },
-    {
-      id: 'lethel_limits_s1_e3',
-      name: 'Episode 3',
-      uri: 'https://dj0vkl2i4vsbo.cloudfront.net/convert/wife_caught_husband/converted/3wife3.m3u8',
-    },
-    {
-      id: 'lethel_limits_s1_e4',
-      name: 'Episode 4',
-      uri: 'https://dj0vkl2i4vsbo.cloudfront.net/convert/wife_caught_husband/converted/4wife4.m3u8',
-    },
-    {
-      id: 'lethel_limits_s1_e5',
-      name: 'Episode 5',
-      uri: 'https://dj0vkl2i4vsbo.cloudfront.net/convert/wife_caught_husband/converted/5wife5.m3u8',
-    },
-    {
-      id: 'lethel_limits_s1_e6',
-      name: 'Episode 6',
-      uri: 'https://dj0vkl2i4vsbo.cloudfront.net/convert/wife_caught_husband/converted/6wife6.m3u8',
-    },
-    {
-      id: 'lethel_limits_s1_e7',
-      name: 'Episode 7',
-      uri: 'https://dj0vkl2i4vsbo.cloudfront.net/convert/wife_caught_husband/converted/7wife7.m3u8',
-    },
-    {
-      id: 'lethel_limits_s1_e8',
-      name: 'Episode 8',
-      uri: 'https://dj0vkl2i4vsbo.cloudfront.net/convert/wife_caught_husband/converted/8wife8.m3u8',
-    },
-  ],
-};
+import {useAppSelector} from '@/redux/hooks';
+import {EpisodeType} from '@/types/redux';
+import {VideoRef} from 'react-native-video';
 
 const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
-  const {serialId, episodeId} = route.params;
-  const episodes: FeedVideosPayload[] = data[serialId];
+  const {serialId, episodeId, time} = route.params;
 
   const {t} = useTranslation();
+
+  const remoteConfig = useAppSelector(state => state.app.remoteConfig);
+
+  const serialItem = remoteConfig.home_banners.find(
+    item => item.id === serialId,
+  );
 
   const handleOnExit = () => {
     if (navigation.canGoBack()) {
@@ -68,7 +30,10 @@ const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
     }
   };
 
-  if (!episodes) {
+  if (
+    !serialItem ||
+    (Array.isArray(serialItem.episodes) && serialItem.episodes.length === 0)
+  ) {
     return (
       <View style={styles.notFoundContainer}>
         <Animated.View
@@ -85,24 +50,32 @@ const WatchScreen: React.FC<WatchScreenProps> = ({route, navigation}) => {
         <Text style={styles.notFoundTitle}>{t('videoNotFound')}</Text>
       </View>
     );
-  }
+  } else {
+    const episodes = serialItem.episodes;
 
-  return (
-    <WatchingContent
-      episodes={episodes}
-      onExit={handleOnExit}
-      episodeId={episodeId}
-    />
-  );
+    return (
+      <WatchingContent
+        serialId={serialId}
+        episodes={episodes}
+        time={time}
+        episodeId={episodeId}
+        onExit={handleOnExit}
+      />
+    );
+  }
 };
 
 const WatchingContent = ({
+  serialId,
   episodes,
   episodeId,
+  time,
   onExit,
 }: {
-  episodes: FeedVideosPayload[];
+  serialId: string;
+  episodes: EpisodeType[];
   episodeId?: string;
+  time?: number;
   onExit: () => void;
 }) => {
   const [activeItemId, setActiveItemId] = useState<string>(episodes[0].id);
@@ -122,7 +95,7 @@ const WatchingContent = ({
         });
       }
     }
-  }, [episodeId]);
+  }, [episodeId, episodes]);
 
   const currentItem = useMemo(() => {
     return episodes.find(item => item.id === activeItemId);
@@ -144,12 +117,14 @@ const WatchingContent = ({
     },
   ]);
 
-  const handleOnEndReached = () => {
-    console.log('onEndReached');
-  };
+  const handleOnEndReached = () => {};
 
-  const handleOnFirstItemLoaded = () => {
+  const handleOnFirstItemLoaded = (ref: RefObject<VideoRef>) => {
     setIsLoaded(true);
+    if (ref.current && time) {
+      const timeToSeek = time <= 5 ? time : time - 3;
+      ref.current.seek(timeToSeek, 0);
+    }
   };
 
   const onScrollToIndexFailed = ({index}: {index: number}) => {
@@ -189,9 +164,10 @@ const WatchingContent = ({
         renderItem={({item}) => (
           <FeedVideo
             item={item}
+            serialId={serialId}
             activeItemId={activeItemId}
             prevItemId={prevItemId}
-            onFirstItemLoaded={handleOnFirstItemLoaded}
+            onFirstItemLoaded={ref => handleOnFirstItemLoaded(ref)}
           />
         )}
         onScrollToIndexFailed={onScrollToIndexFailed}
